@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAMT 干预前评估问卷 / Pre-Intervention Questionnaire</title>
+<style>
+  :root {
+    --teal:       #1A9E78;
+    --teal-light: #E0F5EE;
+    --teal-mid:   #9FE1CB;
+    --teal-dark:  #0A6E4F;
+    --text:       #1A1A1A;
+    --text-sec:   #5A6070;
+    --text-ter:   #9AA0AE;
+    --bg:         #F7F8FA;
+    --card:       #FFFFFF;
+    --border:     #E2E5EC;
+    --radius:     12px;
+    --radius-sm:  8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 20px 16px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* Sub-label English style */
+  .en {
+    display: block;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    margin-top: 1px;
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  .en-dark {
+    display: block;
+    font-size: 10px;
+    color: var(--text-ter);
+    font-weight: 400;
+    margin-top: 1px;
+    font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  label .en-dark { margin-top: 0; }
+
+  .header {
+    background: linear-gradient(135deg, #1A9E78 0%, #0A6E4F 100%);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; color: #fff;
+  }
+  .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  .header-icon {
+    width: 48px; height: 48px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .header h1 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+  .header h1 .en { font-size: 12px; opacity: 0.8; margin-top: 3px; }
+  .header p { font-size: 13px; opacity: 0.85; line-height: 1.6; }
+  .header p .en { font-size: 11px; opacity: 0.7; margin-top: 3px; color: rgba(255,255,255,0.65); }
+  .badge {
+    display: inline-block; background: rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600;
+    margin-bottom: 10px; letter-spacing: 0.5px;
+  }
+
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 20px 20px 22px; margin-bottom: 16px;
+  }
+  .sec-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--teal); color: #fff;
+    font-size: 13px; font-weight: 600; margin-right: 8px; flex-shrink: 0;
+  }
+  .sec-title { font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; margin-bottom: 2px; }
+  .sec-hint { font-size: 12px; color: var(--text-ter); margin-bottom: 14px; padding-left: 34px; }
+  .sec-hint .en-dark { font-size: 10.5px; margin-top: 2px; }
+
+  /* Basic info */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .info-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sec); margin-bottom: 5px; }
+  .info-input, .info-select {
+    width: 100%; font-size: 14px; padding: 9px 12px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; color: var(--text); outline: none;
+    transition: border-color 0.15s; font-family: inherit;
+  }
+  .info-input:focus, .info-select:focus { border-color: var(--teal); }
+  .info-input::placeholder { color: var(--text-ter); }
+  .info-full { grid-column: 1 / -1; }
+
+  /* Radio chips */
+  .radio-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .radio-chip {
+    padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border);
+    font-size: 13px; cursor: pointer; background: #fff; color: var(--text-sec);
+    transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .radio-chip .chip-en { font-size: 10px; color: var(--text-ter); display: block; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .radio-chip.sel { background: var(--teal-light); border-color: var(--teal); color: var(--teal-dark); font-weight: 600; }
+  .radio-chip.sel .chip-en { color: var(--teal); }
+
+  /* Emotion grid */
+  .emo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px; }
+  .emo-card {
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    padding: 10px 4px 8px; text-align: center; cursor: pointer; background: #fff;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .emo-card:active { transform: scale(0.95); }
+  .emo-card.sel { border-color: var(--teal); background: var(--teal-light); }
+  .emo-face { font-size: 28px; line-height: 1.15; margin-bottom: 4px; }
+  .emo-word { font-size: 11.5px; color: var(--text-sec); line-height: 1.3; }
+  .emo-word-en { font-size: 9px; color: var(--text-ter); line-height: 1.2; margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .emo-card.sel .emo-word { color: var(--teal-dark); font-weight: 500; }
+  .emo-card.sel .emo-word-en { color: var(--teal); }
+  .emo-result {
+    margin-top: 12px; font-size: 13px; color: var(--text-sec);
+    padding: 8px 12px; background: var(--bg); border-radius: var(--radius-sm);
+  }
+  .emo-result span { color: var(--teal-dark); font-weight: 500; }
+
+  /* VAS */
+  .vas-bar-wrap { position: relative; height: 32px; border-radius: 16px; overflow: hidden; margin: 4px 0 8px; }
+  .vas-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, #9A1010, #B82020, #D83838, #E84E30, #F07028, #F09A28, #F0C030, #D4DA28, #A4D234, #70C84B, #41C464);
+    border-radius: 16px;
+  }
+  .vas-bar-wrap input[type=range] {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer; z-index: 3; -webkit-appearance: none;
+  }
+  .vas-thumb {
+    position: absolute; top: 50%; z-index: 2;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.28);
+    transform: translate(-50%, -50%); transition: left 0.04s;
+    pointer-events: none; background: #fff;
+  }
+  .vas-ruler { display: flex; justify-content: space-between; padding: 0 4px; margin-bottom: 4px; }
+  .vas-ruler span { font-size: 11px; color: var(--text-ter); }
+  .vas-ruler .ruler-en { font-size: 9px; color: var(--text-ter); opacity: 0.7; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .vas-readout { text-align: center; padding: 10px 0 4px; }
+  .vas-num { font-size: 28px; font-weight: 700; }
+  .vas-label { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
+  .vas-label-en { font-size: 10px; color: var(--text-ter); margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+
+  /* Submit */
+  .submit-btn {
+    width: 100%; padding: 14px; border-radius: var(--radius); border: none;
+    background: var(--teal); color: #fff; font-size: 16px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .submit-btn .btn-en { display: block; font-size: 11px; font-weight: 400; opacity: 0.8; margin-top: 2px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .submit-btn:hover { background: var(--teal-dark); }
+  .submit-btn:active { transform: scale(0.98); }
+
+  /* Result overlay */
+  .result-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 100;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .result-overlay.show { display: flex; }
+  .result-box {
+    background: #fff; border-radius: var(--radius);
+    padding: 28px 24px; max-width: 480px; width: 100%;
+    max-height: 85vh; overflow-y: auto;
+  }
+  .result-icon { font-size: 40px; text-align: center; margin-bottom: 12px; }
+  .result-title { font-size: 18px; font-weight: 600; text-align: center; margin-bottom: 4px; }
+  .result-title-en { font-size: 12px; color: var(--text-ter); text-align: center; margin-bottom: 14px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .result-row { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .result-row:last-child { border-bottom: none; }
+  .result-key { color: var(--text-sec); min-width: 110px; flex-shrink: 0; }
+  .result-val { color: var(--text); font-weight: 500; flex: 1; }
+  .result-note {
+    margin: 14px 0 0; padding: 12px 14px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 500; line-height: 1.6;
+    background: var(--teal-light); color: var(--teal-dark);
+  }
+  .result-note .en-note { font-size: 11px; font-weight: 400; color: var(--teal); opacity: 0.85; display: block; margin-top: 4px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .result-close {
+    margin-top: 18px; width: 100%; padding: 11px;
+    border-radius: var(--radius-sm); border: 1.5px solid var(--teal);
+    background: #fff; color: var(--teal);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .result-close:hover { background: var(--teal-light); }
+
+  @media (max-width: 520px) {
+    .emo-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    .emo-face { font-size: 22px; }
+    .emo-word { font-size: 10px; }
+    .emo-word-en { font-size: 8px; }
+    .emo-card { padding: 7px 2px 5px; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 521px) {
+    .emo-grid { grid-template-columns: repeat(7, 1fr) !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">干预前评估 · Pre-Intervention</div>
+    <div class="header-top">
+      <div class="header-icon">🎵</div>
+      <h1>PAMT 干预前问卷
+        <span class="en">Pre-Intervention Assessment</span>
+      </h1>
+    </div>
+    <p>请在音乐治疗开始前填写，帮助记录您当下真实的状态。全程约 2 分钟。
+      <span class="en">Please complete before music therapy begins. This helps record your current state. Takes about 2 minutes.</span>
+    </p>
+  </div>
+
+  <!-- Section 1: Basic Info -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">1</span>基本信息 <span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Basic Information</span></div>
+    <div class="sec-hint">请填写您的基础资料，用于研究记录
+      <span class="en-dark">Please provide your details for research records.</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-field">
+        <label>姓名（或编号）<span class="en-dark">Name / ID</span></label>
+        <input class="info-input" type="text" id="infoName" placeholder="请填写 / Please enter">
+      </div>
+      <div class="info-field">
+        <label>年龄 <span class="en-dark">Age</span></label>
+        <input class="info-input" type="number" id="infoAge" placeholder="岁 / yrs" min="18" max="120">
+      </div>
+      <div class="info-field">
+        <label>性别 <span class="en-dark">Gender</span></label>
+        <div class="radio-chips" id="genderChips">
+          <div class="radio-chip" data-v="男" onclick="singleChip('genderChips',this)">男<span class="chip-en">Male</span></div>
+          <div class="radio-chip" data-v="女" onclick="singleChip('genderChips',this)">女<span class="chip-en">Female</span></div>
+          <div class="radio-chip" data-v="其他" onclick="singleChip('genderChips',this)">其他<span class="chip-en">Other</span></div>
+        </div>
+      </div>
+      <div class="info-field">
+        <label>手术类型 <span class="en-dark">Surgery Type</span></label>
+        <input class="info-input" type="text" id="infoSurgery" placeholder="例：腹腔镜胆囊切除 / e.g. Laparoscopic cholecystectomy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Emotion -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">2</span>您现在的感受是什么？<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">How are you feeling?</span></div>
+    <div class="sec-hint">请点选最符合您感受的表情，最多选 3 个
+      <span class="en-dark">Select up to 3 emotions that best describe how you feel right now.</span>
+    </div>
+    <div class="emo-grid" id="emoGrid">
+      <div class="emo-card" data-word="焦虑"><div class="emo-face">😰</div><div class="emo-word">焦虑</div><div class="emo-word-en">Anxious</div></div>
+      <div class="emo-card" data-word="紧张"><div class="emo-face">😬</div><div class="emo-word">紧张</div><div class="emo-word-en">Nervous</div></div>
+      <div class="emo-card" data-word="害怕"><div class="emo-face">😨</div><div class="emo-word">害怕</div><div class="emo-word-en">Scared</div></div>
+      <div class="emo-card" data-word="恐惧"><div class="emo-face">😱</div><div class="emo-word">恐惧</div><div class="emo-word-en">Fearful</div></div>
+      <div class="emo-card" data-word="不安"><div class="emo-face">😟</div><div class="emo-word">不安</div><div class="emo-word-en">Uneasy</div></div>
+      <div class="emo-card" data-word="忐忑"><div class="emo-face">😖</div><div class="emo-word">忐忑</div><div class="emo-word-en">On edge</div></div>
+      <div class="emo-card" data-word="担忧"><div class="emo-face">🫤</div><div class="emo-word">担忧</div><div class="emo-word-en">Worried</div></div>
+      <div class="emo-card" data-word="慌乱"><div class="emo-face">😦</div><div class="emo-word">慌乱</div><div class="emo-word-en">Panicky</div></div>
+      <div class="emo-card" data-word="难过"><div class="emo-face">😢</div><div class="emo-word">难过</div><div class="emo-word-en">Sad</div></div>
+      <div class="emo-card" data-word="悲伤"><div class="emo-face">😭</div><div class="emo-word">悲伤</div><div class="emo-word-en">Sorrowful</div></div>
+      <div class="emo-card" data-word="沮丧"><div class="emo-face">😞</div><div class="emo-word">沮丧</div><div class="emo-word-en">Dejected</div></div>
+      <div class="emo-card" data-word="绝望"><div class="emo-face">😔</div><div class="emo-word">绝望</div><div class="emo-word-en">Hopeless</div></div>
+      <div class="emo-card" data-word="无助"><div class="emo-face">🥺</div><div class="emo-word">无助</div><div class="emo-word-en">Helpless</div></div>
+      <div class="emo-card" data-word="委屈"><div class="emo-face">🥹</div><div class="emo-word">委屈</div><div class="emo-word-en">Aggrieved</div></div>
+      <div class="emo-card" data-word="孤独"><div class="emo-face">🙁</div><div class="emo-word">孤独</div><div class="emo-word-en">Lonely</div></div>
+      <div class="emo-card" data-word="空虚"><div class="emo-face">😶</div><div class="emo-word">空虚</div><div class="emo-word-en">Empty</div></div>
+      <div class="emo-card" data-word="烦躁"><div class="emo-face">😤</div><div class="emo-word">烦躁</div><div class="emo-word-en">Irritable</div></div>
+      <div class="emo-card" data-word="愤怒"><div class="emo-face">😠</div><div class="emo-word">愤怒</div><div class="emo-word-en">Angry</div></div>
+      <div class="emo-card" data-word="不耐烦"><div class="emo-face">😒</div><div class="emo-word">不耐烦</div><div class="emo-word-en">Impatient</div></div>
+      <div class="emo-card" data-word="抵触"><div class="emo-face">🙄</div><div class="emo-word">抵触</div><div class="emo-word-en">Resistant</div></div>
+      <div class="emo-card" data-word="憋屈"><div class="emo-face">😣</div><div class="emo-word">憋屈</div><div class="emo-word-en">Stifled</div></div>
+      <div class="emo-card" data-word="无奈"><div class="emo-face">😑</div><div class="emo-word">无奈</div><div class="emo-word-en">Resigned</div></div>
+      <div class="emo-card" data-word="疲惫"><div class="emo-face">😴</div><div class="emo-word">疲惫</div><div class="emo-word-en">Exhausted</div></div>
+      <div class="emo-card" data-word="虚弱"><div class="emo-face">🤒</div><div class="emo-word">虚弱</div><div class="emo-word-en">Weak</div></div>
+      <div class="emo-card" data-word="沉重"><div class="emo-face">😩</div><div class="emo-word">沉重</div><div class="emo-word-en">Heavy</div></div>
+      <div class="emo-card" data-word="茫然"><div class="emo-face">🫠</div><div class="emo-word">茫然</div><div class="emo-word-en">Lost</div></div>
+      <div class="emo-card" data-word="麻木"><div class="emo-face">😐</div><div class="emo-word">麻木</div><div class="emo-word-en">Numb</div></div>
+      <div class="emo-card" data-word="头脑混乱"><div class="emo-face">🤯</div><div class="emo-word">头脑混乱</div><div class="emo-word-en">Confused</div></div>
+      <div class="emo-card" data-word="平静"><div class="emo-face">😌</div><div class="emo-word">平静</div><div class="emo-word-en">Calm</div></div>
+      <div class="emo-card" data-word="放松"><div class="emo-face">😊</div><div class="emo-word">放松</div><div class="emo-word-en">Relaxed</div></div>
+      <div class="emo-card" data-word="安心"><div class="emo-face">🥰</div><div class="emo-word">安心</div><div class="emo-word-en">Reassured</div></div>
+      <div class="emo-card" data-word="踏实"><div class="emo-face">😇</div><div class="emo-word">踏实</div><div class="emo-word-en">Grounded</div></div>
+      <div class="emo-card" data-word="从容"><div class="emo-face">🧘</div><div class="emo-word">从容</div><div class="emo-word-en">Composed</div></div>
+      <div class="emo-card" data-word="释然"><div class="emo-face">😮‍💨</div><div class="emo-word">释然</div><div class="emo-word-en">Relieved</div></div>
+      <div class="emo-card" data-word="开心"><div class="emo-face">😄</div><div class="emo-word">开心</div><div class="emo-word-en">Happy</div></div>
+      <div class="emo-card" data-word="愉快"><div class="emo-face">😀</div><div class="emo-word">愉快</div><div class="emo-word-en">Cheerful</div></div>
+      <div class="emo-card" data-word="感激"><div class="emo-face">🙏</div><div class="emo-word">感激</div><div class="emo-word-en">Grateful</div></div>
+      <div class="emo-card" data-word="充满希望"><div class="emo-face">🌟</div><div class="emo-word">充满希望</div><div class="emo-word-en">Hopeful</div></div>
+      <div class="emo-card" data-word="期待"><div class="emo-face">🤩</div><div class="emo-word">期待</div><div class="emo-word-en">Eager</div></div>
+      <div class="emo-card" data-word="有信心"><div class="emo-face">💪</div><div class="emo-word">有信心</div><div class="emo-word-en">Confident</div></div>
+    </div>
+    <div class="emo-result">已选 / Selected：<span id="emoSel">尚未选择 / None yet</span></div>
+  </div>
+
+  <!-- Section 3: VAS -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">3</span>您现在的整体感受<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Overall Wellbeing</span></div>
+    <div class="sec-hint">0 = 整体感觉非常不好，10 = 整体感觉非常好，请拖动滑块
+      <span class="en-dark">0 = Feeling very poor, 10 = Feeling very well. Drag the slider.</span>
+    </div>
+    <div class="vas-bar-wrap">
+      <div class="vas-gradient"></div>
+      <div class="vas-thumb" id="vasThumb" style="left:0%"></div>
+      <input type="range" id="vasRange" min="0" max="10" step="1" value="5">
+    </div>
+    <div class="vas-ruler">
+      <span>0 非常不好<br><span class="ruler-en">Very poor</span></span>
+      <span style="text-align:center;">5 一般<br><span class="ruler-en">Moderate</span></span>
+      <span style="text-align:right;">10 非常好<br><span class="ruler-en">Very well</span></span>
+    </div>
+    <div class="vas-readout">
+      <div class="vas-num" id="vasNum" style="color:#F0C030">5</div>
+      <div class="vas-label" id="vasLbl">一般</div>
+      <div class="vas-label-en" id="vasLblEn">Moderate</div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-wrap">
+    <button class="submit-btn" onclick="handleSubmit()">提交干预前问卷 →
+      <span class="btn-en">Submit Pre-Intervention Questionnaire</span>
+    </button>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-box">
+    <div class="result-icon">✅</div>
+    <div class="result-title">干预前记录已完成</div>
+    <div class="result-title-en">Pre-Intervention Record Submitted</div>
+    <div id="resRows"></div>
+    <div class="result-note">➤ 请将此页面交还治疗师，准备开始 PAMT 干预。
+      <span class="en-note">Please return this screen to the therapist. You are now ready to begin the PAMT session.</span>
+    </div>
+    <button class="result-close" onclick="closeResult()">关闭 / Close</button>
+  </div>
+</div>
+
+<script>
+const vasColors = ["#9A1010","#B82020","#D83838","#E84E30","#F07028","#F09A28","#F0C030","#D4DA28","#A4D234","#70C84B","#41C464"];
+const vasDescs  = ["整体感觉非常不好","感觉很差","感觉较差","感觉不太好","略感不适","一般","还不错","感觉较好","感觉好","感觉很好","整体感觉非常好"];
+const vasDescsEn= ["Feeling very poor","Feeling quite poor","Feeling rather poor","Feeling slightly off","Slightly uncomfortable","Moderate","Fairly good","Feeling good","Feeling well","Feeling very well","Feeling excellent"];
+const vasRange  = document.getElementById('vasRange');
+const vasThumb  = document.getElementById('vasThumb');
+const vasNum    = document.getElementById('vasNum');
+const vasLbl    = document.getElementById('vasLbl');
+const vasLblEn  = document.getElementById('vasLblEn');
+
+function updateVas() {
+  const v = parseInt(vasRange.value);
+  const pct = v / 10 * 100;
+  vasThumb.style.left = `calc(${pct}% - ${pct * 0.22}px)`;
+  vasNum.textContent = v;
+  vasNum.style.color = vasColors[v];
+  vasLbl.textContent = vasDescs[v];
+  vasLblEn.textContent = vasDescsEn[v];
+}
+vasRange.addEventListener('input', updateVas);
+updateVas();
+
+function singleChip(groupId, el) {
+  document.querySelectorAll('#' + groupId + ' .radio-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+const selected = new Set();
+document.querySelectorAll('.emo-card').forEach(c => {
+  c.addEventListener('click', () => {
+    const w = c.dataset.word;
+    if (c.classList.contains('sel')) {
+      c.classList.remove('sel'); selected.delete(w);
+    } else if (selected.size < 3) {
+      c.classList.add('sel'); selected.add(w);
+    } else {
+      const oldest = [...selected][0]; selected.delete(oldest);
+      document.querySelectorAll(`.emo-card[data-word="${oldest}"]`).forEach(x => x.classList.remove('sel'));
+      c.classList.add('sel'); selected.add(w);
+    }
+    document.getElementById('emoSel').textContent = selected.size ? [...selected].join(' · ') : '尚未选择 / None yet';
+  });
+});
+
+function handleSubmit() {
+  const name    = document.getElementById('infoName').value.trim();
+  const age     = document.getElementById('infoAge').value.trim();
+  const gender  = document.querySelector('#genderChips .radio-chip.sel');
+  const surgery = document.getElementById('infoSurgery').value.trim();
+  if (!name)    { alert('请填写姓名或编号 / Please enter your name or ID'); return; }
+  if (!age)     { alert('请填写年龄 / Please enter your age'); return; }
+  if (!gender)  { alert('请选择性别 / Please select gender'); return; }
+  if (!selected.size) { alert('请至少选择一个情绪感受 / Please select at least one emotion'); return; }
+
+  const score = parseInt(vasRange.value);
+  const rows = [
+    ['姓名/编号 · Name/ID', name],
+    ['年龄 · Age', age + ' 岁 / yrs'],
+    ['性别 · Gender', gender.dataset.v],
+    ['手术类型 · Surgery', surgery || '未填写 / Not provided'],
+    ['情绪词 · Emotions', [...selected].join(' · ')],
+    ['VAS 评分（干预前）· VAS Score (Pre)', score + ' / 10 — ' + vasDescs[score]],
+  ];
+
+  document.getElementById('resRows').innerHTML = rows.map(([k,v]) =>
+    `<div class="result-row"><div class="result-key">${k}</div><div class="result-val">${v}</div></div>`
+  ).join('');
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
