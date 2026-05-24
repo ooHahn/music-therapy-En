@@ -292,6 +292,63 @@
   }
   .result-close:hover { background: var(--teal-light); }
 
+  /* ── Patient Info ── */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .info-field { display: flex; flex-direction: column; gap: 4px; }
+  .info-field-full { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 4px; }
+  .info-label { font-size: 12px; font-weight: 600; color: var(--teal-dark); }
+  .info-label-en { font-size: 10px; color: var(--teal); opacity: 0.75; margin-bottom: 2px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .info-input {
+    width: 100%; font-size: 13px;
+    padding: 8px 11px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; color: var(--text); outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .info-input:focus { border-color: var(--teal); }
+  .info-input::placeholder { color: var(--text-ter); }
+  .info-select {
+    width: 100%; font-size: 13px;
+    padding: 8px 11px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; color: var(--text); outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239AA0AE' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+  .info-select:focus { border-color: var(--teal); }
+
+  /* ── Music time question ── */
+  .music-time-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+  .music-time-opt {
+    font-size: 12.5px; padding: 7px 14px; border-radius: 20px;
+    border: 1.5px solid var(--border); color: var(--text-sec);
+    background: #fff; cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .music-time-opt .opt-en { font-size: 9.5px; color: var(--text-ter); display: block; margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .music-time-opt.sel { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .music-time-opt.sel .opt-en { color: rgba(255,255,255,0.75); }
+
+  /* ── Other input with text box ── */
+  .chip-other-wrap { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .chip-other-input {
+    font-size: 12px; padding: 4px 10px;
+    border: 1px solid var(--teal-mid); border-radius: 20px;
+    background: #fff; color: var(--text); outline: none;
+    width: 130px; display: none;
+    font-family: inherit;
+  }
+  .chip-other-input.show { display: inline-block; }
+  .chip-other-input::placeholder { color: var(--text-ter); }
+
   @media (max-width: 520px) {
     .emo-grid { grid-template-columns: repeat(4, 1fr) !important; }
     .emo-face { font-size: 22px; }
@@ -322,6 +379,41 @@
     <p>请根据您目前真实的感受填写，帮助治疗师为您制定最合适的音乐干预方案。全程约 2 分钟。
       <span class="en-white">Please answer honestly based on how you feel right now. This helps the therapist tailor the best music intervention plan for you. Takes about 2 minutes.</span>
     </p>
+  </div>
+
+  <!-- Patient Info -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num" style="background:var(--teal)">★</span>患者基本信息<span class="sec-en">Patient Information</span></div>
+    <div class="sec-hint">请填写您的基本信息，方便治疗师了解您的情况
+      <span class="en-dark">Please fill in your basic information to help the therapist identify you.</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-field">
+        <div class="info-label">姓名 <span class="info-label-en">Full Name</span></div>
+        <input class="info-input" type="text" id="patientName" placeholder="请输入姓名 / Your name">
+      </div>
+      <div class="info-field">
+        <div class="info-label">年龄 <span class="info-label-en">Age</span></div>
+        <input class="info-input" type="number" id="patientAge" placeholder="岁 / years old" min="0" max="120">
+      </div>
+      <div class="info-field">
+        <div class="info-label">性别 <span class="info-label-en">Gender</span></div>
+        <select class="info-select" id="patientGender">
+          <option value="">请选择 / Select</option>
+          <option value="男">男 / Male</option>
+          <option value="女">女 / Female</option>
+          <option value="其他">其他 / Other</option>
+        </select>
+      </div>
+      <div class="info-field">
+        <div class="info-label">科室与床位 <span class="info-label-en">Ward &amp; Bed No.</span></div>
+        <input class="info-input" type="text" id="patientBed" placeholder="例：心外科 / 12床">
+      </div>
+      <div class="info-field-full">
+        <div class="info-label">手术类型 <span class="info-label-en">Surgery Type</span></div>
+        <input class="info-input" type="text" id="patientSurgery" placeholder="例：心脏搭桥手术 / e.g. Coronary artery bypass graft">
+      </div>
+    </div>
   </div>
 
   <!-- Q1: Emotion -->
@@ -403,9 +495,36 @@
     </div>
   </div>
 
-  <!-- Q3: Mode -->
+  <!-- Q2b: Daily Music Listening Time -->
   <div class="card">
-    <div class="sec-title"><span class="sec-num">3</span>您希望的音乐治疗方式<span class="sec-en">Preferred Session Style</span></div>
+    <div class="sec-title"><span class="sec-num">3</span>过去一周内，您平均每天听音乐的时间<span class="sec-en">Daily Music Listening (Past Week)</span></div>
+    <div class="sec-hint">请选择最符合您实际情况的选项
+      <span class="en-dark">Select the option that best reflects your typical daily music listening time over the past week.</span>
+    </div>
+    <div class="music-time-opts" id="musicTimeOpts">
+      <div class="music-time-opt" data-v="未听音乐">未听音乐<span class="opt-en">No music</span></div>
+      <div class="music-time-opt" data-v="小于30分钟">&lt; 30 分钟<span class="opt-en">Less than 30 min</span></div>
+      <div class="music-time-opt" data-v="30-60分钟">30–60 分钟<span class="opt-en">30–60 minutes</span></div>
+      <div class="music-time-opt" data-v="1-2小时">1–2 小时<span class="opt-en">1–2 hours</span></div>
+      <div class="music-time-opt" data-v="大于2小时">&gt; 2 小时<span class="opt-en">More than 2 hours</span></div>
+    </div>
+  </div>
+
+  <!-- Q3b: Prior Music Therapy Experience -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">4</span>您有无接受过音乐治疗？<span class="sec-en">Prior Music Therapy Experience</span></div>
+    <div class="sec-hint">请选择您的情况
+      <span class="en-dark">Please select whether you have previously received music therapy.</span>
+    </div>
+    <div class="music-time-opts" id="priorMTOpts">
+      <div class="music-time-opt" data-v="有">有<span class="opt-en">Yes</span></div>
+      <div class="music-time-opt" data-v="无">无<span class="opt-en">No</span></div>
+    </div>
+  </div>
+
+  <!-- Q4: Mode -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">5</span>您希望的音乐治疗方式<span class="sec-en">Preferred Session Style</span></div>
     <div class="sec-hint">请选择更符合您当下状态的方式
       <span class="en-dark">Choose the approach that best suits how you feel right now.</span>
     </div>
@@ -427,7 +546,7 @@
       </div>
     </div>
 
-    <!-- Q4: Playlist (only for A) -->
+    <!-- Q5: Music Preferences (shown for both A and B) -->
     <div class="playlist-panel" id="playlistPanel">
       <div class="pl-header">
         <span class="pl-header-icon">🎼</span>
@@ -444,9 +563,15 @@
           <div class="chip" data-v="中国传统音乐">中国传统<span class="chip-en">Chinese Traditional</span></div>
           <div class="chip" data-v="自然音效">自然音效<span class="chip-en">Nature Sounds</span></div>
           <div class="chip" data-v="轻爵士">轻爵士<span class="chip-en">Smooth Jazz</span></div>
-          <div class="chip" data-v="轻流行">轻流行<span class="chip-en">Soft Pop</span></div>
+          <div class="chip" data-v="流行/Pop">流行 / Pop<span class="chip-en">Pop</span></div>
+          <div class="chip" data-v="轻摇滚/轻电子">轻摇滚 / 轻电子<span class="chip-en">Soft Rock / Lo-fi</span></div>
           <div class="chip" data-v="冥想/频率音乐">冥想 / 频率<span class="chip-en">Meditation</span></div>
           <div class="chip" data-v="民谣/Acoustic">民谣 / Acoustic<span class="chip-en">Folk / Acoustic</span></div>
+          <div class="chip" data-v="戏曲/民歌">戏曲 / 民歌<span class="chip-en">Opera / Folk Song</span></div>
+          <div class="chip" data-v="福音/灵魂乐">福音 / 灵魂乐<span class="chip-en">Gospel / Soul</span></div>
+          <div class="chip" data-v="儿歌/怀旧">儿歌 / 怀旧<span class="chip-en">Nostalgic / Children's</span></div>
+          <div class="chip" data-v="OST/影视音乐">OST / 影视音乐<span class="chip-en">Soundtrack / OST</span></div>
+          <div class="chip" data-v="宗教/圣乐">宗教 / 圣乐<span class="chip-en">Sacred / Religious</span></div>
         </div>
       </div>
 
@@ -467,10 +592,15 @@
         <div class="pl-label">语言偏好</div>
         <div class="pl-label-en">Language preference</div>
         <div class="chips" id="langChips">
-          <div class="chip" data-v="中文">中文<span class="chip-en">Chinese</span></div>
-          <div class="chip" data-v="英文">英文<span class="chip-en">English</span></div>
+          <div class="chip" data-v="中文普通话">中文普通话<span class="chip-en">Mandarin</span></div>
+          <div class="chip" data-v="方言">方言<span class="chip-en">Dialect</span></div>
+          <div class="chip" data-v="欧美">欧美<span class="chip-en">Western</span></div>
+          <div class="chip" data-v="日韩">日韩<span class="chip-en">Japanese / Korean</span></div>
           <div class="chip" data-v="纯音乐（无歌词）">纯音乐<span class="chip-en">Instrumental</span></div>
-          <div class="chip" data-v="均可">均可<span class="chip-en">Any</span></div>
+          <div class="chip chip-other-trigger" data-v="其他" id="langOtherChip">其他<span class="chip-en">Other</span></div>
+        </div>
+        <div style="margin-top:6px;">
+          <input class="pl-input" type="text" id="langOtherInput" placeholder="请注明语言 / Please specify…" style="display:none; width:100%;">
         </div>
       </div>
 
@@ -482,6 +612,10 @@
           <div class="chip" data-v="中等节奏">中等节奏<span class="chip-en">Moderate</span></div>
           <div class="chip" data-v="有活力/稍快">有活力 · 稍快<span class="chip-en">Upbeat</span></div>
           <div class="chip" data-v="均可">均可<span class="chip-en">Any</span></div>
+          <div class="chip chip-other-trigger" data-v="其他" id="tempoOtherChip">其他<span class="chip-en">Other</span></div>
+        </div>
+        <div style="margin-top:6px;">
+          <input class="pl-input" type="text" id="tempoOtherInput" placeholder="请注明节奏偏好 / Please specify…" style="display:none; width:100%;">
         </div>
       </div>
 
@@ -558,54 +692,105 @@ document.querySelectorAll('.emo-card').forEach(c => {
   });
 });
 
-// Mode selection
+// Prior music therapy single-select
+document.querySelectorAll('#priorMTOpts .music-time-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#priorMTOpts .music-time-opt').forEach(x => x.classList.remove('sel'));
+    opt.classList.add('sel');
+  });
+});
+
+// Music time single-select
+document.querySelectorAll('#musicTimeOpts .music-time-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#musicTimeOpts .music-time-opt').forEach(x => x.classList.remove('sel'));
+    opt.classList.add('sel');
+  });
+});
+
+// Mode selection — show music preferences for both A and B
 let currentMode = '';
 function selectMode(m) {
   currentMode = m;
   document.getElementById('cardA').className = 'mode-card' + (m === 'A' ? ' selA' : '');
   document.getElementById('cardB').className = 'mode-card' + (m === 'B' ? ' selB' : '');
-  document.getElementById('playlistPanel').className = 'playlist-panel' + (m === 'A' ? ' show' : '');
+  document.getElementById('playlistPanel').className = 'playlist-panel show';
 }
 
-// Multi-select chips
+// Multi-select chips (genre, tempo)
 document.querySelectorAll('#genreChips .chip, #tempoChips .chip').forEach(c => {
   c.addEventListener('click', () => c.classList.toggle('sel'));
 });
-// Single-select chips
-['langChips'].forEach(id => {
-  document.querySelectorAll('#' + id + ' .chip').forEach(c => {
-    c.addEventListener('click', () => {
-      document.querySelectorAll('#' + id + ' .chip').forEach(x => x.classList.remove('sel'));
-      c.classList.add('sel');
-    });
+
+// Language: multi-select with "其他" free text
+document.querySelectorAll('#langChips .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    c.classList.toggle('sel');
+    const inp = document.getElementById('langOtherInput');
+    const otherSel = document.querySelector('#langChips .chip[data-v="其他"]').classList.contains('sel');
+    inp.style.display = otherSel ? 'block' : 'none';
   });
+});
+
+// Tempo: add "其他" free text
+document.querySelector('#tempoChips .chip[data-v="其他"]').addEventListener('click', () => {
+  const sel = document.querySelector('#tempoChips .chip[data-v="其他"]').classList.contains('sel');
+  document.getElementById('tempoOtherInput').style.display = sel ? 'block' : 'none';
 });
 
 function handleSubmit() {
   if (!selected.size) { alert('请至少选择一个情绪感受 / Please select at least one emotion'); return; }
   if (!currentMode)   { alert('请选择音乐治疗方式 / Please select a session style (Plan A or B)'); return; }
 
-  const score  = parseInt(vasRange.value);
-  const genres = [...document.querySelectorAll('#genreChips .chip.sel')].map(x => x.dataset.v);
-  const lang   = document.querySelector('#langChips .chip.sel');
-  const tempo  = [...document.querySelectorAll('#tempoChips .chip.sel')].map(x => x.dataset.v);
-  const artist = document.getElementById('artistInput').value.trim();
-  const song   = document.getElementById('songInput').value.trim();
-  const other  = document.getElementById('otherInput').value.trim();
+  const name    = document.getElementById('patientName').value.trim();
+  const age     = document.getElementById('patientAge').value.trim();
+  const gender  = document.getElementById('patientGender').value;
+  const bed     = document.getElementById('patientBed').value.trim();
+  const surgery = document.getElementById('patientSurgery').value.trim();
 
-  const rows = [
-    ['情绪 · Emotions',   [...selected].join(' · ')],
-    ['焦虑评分 · Anxiety', score + ' / 10 — ' + vasDescs[score]],
-    ['方案 · Plan',        currentMode === 'A' ? '方案A — 安静聆听 / Quiet Listening' : '方案B — 互动参与 / Interactive Session'],
-  ];
-  if (currentMode === 'A') {
-    if (genres.length) rows.push(['音乐类型 · Genre',   genres.join('、')]);
-    if (artist)        rows.push(['歌手 · Artist',       artist]);
-    if (song)          rows.push(['曲目 · Songs',        song]);
-    if (lang)          rows.push(['语言 · Language',     lang.dataset.v]);
-    if (tempo.length)  rows.push(['节奏 · Tempo',        tempo.join('、')]);
-    if (other)         rows.push(['其他 · Other',        other]);
-  }
+  const score   = parseInt(vasRange.value);
+  const musicTimeEl = document.querySelector('#musicTimeOpts .music-time-opt.sel');
+  const musicTime   = musicTimeEl ? musicTimeEl.dataset.v : '未填写';
+  const priorMTEl   = document.querySelector('#priorMTOpts .music-time-opt.sel');
+  const priorMT     = priorMTEl ? priorMTEl.dataset.v : '未填写';
+
+  const genres  = [...document.querySelectorAll('#genreChips .chip.sel')].map(x => x.dataset.v);
+
+  // Language: collect all selected, replace "其他" with free text if provided
+  const langOtherVal = document.getElementById('langOtherInput').value.trim();
+  const langs = [...document.querySelectorAll('#langChips .chip.sel')].map(x => {
+    if (x.dataset.v === '其他' && langOtherVal) return '其他：' + langOtherVal;
+    return x.dataset.v;
+  });
+
+  // Tempo: collect selected, replace "其他" with free text
+  const tempoOtherVal = document.getElementById('tempoOtherInput').value.trim();
+  const tempo = [...document.querySelectorAll('#tempoChips .chip.sel')].map(x => {
+    if (x.dataset.v === '其他' && tempoOtherVal) return '其他：' + tempoOtherVal;
+    return x.dataset.v;
+  });
+
+  const artist  = document.getElementById('artistInput').value.trim();
+  const song    = document.getElementById('songInput').value.trim();
+  const other   = document.getElementById('otherInput').value.trim();
+
+  const rows = [];
+  if (name)    rows.push(['姓名 · Name',         name]);
+  if (age)     rows.push(['年龄 · Age',           age + ' 岁']);
+  if (gender)  rows.push(['性别 · Gender',        gender]);
+  if (bed)     rows.push(['科室床位 · Ward/Bed',  bed]);
+  if (surgery) rows.push(['手术类型 · Surgery',   surgery]);
+  rows.push(['情绪 · Emotions',   [...selected].join(' · ')]);
+  rows.push(['焦虑评分 · Anxiety', score + ' / 10 — ' + vasDescs[score]]);
+  rows.push(['每日听音乐 · Music/day', musicTime]);
+  rows.push(['接受过音乐治疗 · Prior MT', priorMT]);
+  rows.push(['方案 · Plan',        currentMode === 'A' ? '方案A — 安静聆听 / Quiet Listening' : '方案B — 互动参与 / Interactive Session']);
+  if (genres.length) rows.push(['音乐类型 · Genre',   genres.join('、')]);
+  if (artist)        rows.push(['歌手 · Artist',       artist]);
+  if (song)          rows.push(['曲目 · Songs',        song]);
+  if (langs.length)  rows.push(['语言 · Language',     langs.join('、')]);
+  if (tempo.length)  rows.push(['节奏 · Tempo',        tempo.join('、')]);
+  if (other)         rows.push(['其他 · Other',        other]);
 
   document.getElementById('resRows').innerHTML = rows.map(([k, v]) =>
     `<div class="result-row"><div class="result-key">${k}</div><div class="result-val">${v}</div></div>`
