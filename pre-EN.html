@@ -209,56 +209,6 @@
     .emo-grid { grid-template-columns: repeat(7, 1fr) !important; }
   }
 
-  /* Consent section */
-  .consent-scroll {
-    max-height: 260px; overflow-y: auto; border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px 16px; background: #FCFCFD;
-    font-size: 12.5px; line-height: 1.75; color: var(--text-sec); margin-bottom: 14px;
-  }
-  .consent-scroll h4 { font-size: 13.5px; color: var(--text); margin: 14px 0 6px; }
-  .consent-scroll h4:first-child { margin-top: 0; }
-  .consent-scroll h5 { font-size: 12.5px; color: var(--teal-dark); margin: 10px 0 4px; }
-  .consent-scroll p { margin: 0 0 8px; }
-  .consent-scroll ul, .consent-scroll ol { margin: 0 0 8px 18px; }
-  .consent-scroll li { margin-bottom: 4px; }
-  .consent-scroll .consent-meta { margin-bottom: 10px; }
-  .consent-scroll .consent-meta div { margin-bottom: 3px; }
-  .consent-scroll strong { color: var(--text); }
-  .consent-scroll .consent-underline { text-decoration: underline; }
-  .consent-scroll::-webkit-scrollbar { width: 6px; }
-  .consent-scroll::-webkit-scrollbar-thumb { background: var(--teal-mid); border-radius: 3px; }
-
-  .consent-scroll-hint {
-    font-size: 11px; color: var(--text-ter); text-align: center; margin: -8px 0 12px;
-  }
-
-  .consent-checkbox {
-    display: flex; align-items: flex-start; gap: 8px; font-size: 13px;
-    color: var(--text); line-height: 1.5; padding: 10px 12px; background: var(--teal-light);
-    border-radius: var(--radius-sm); margin-bottom: 16px; cursor: pointer; user-select: none;
-  }
-  .consent-checkbox input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
-
-  .consent-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .consent-field-grid .info-field { grid-column: span 1; }
-
-  .sig-pad-wrap label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sec); margin-bottom: 6px; }
-  .sig-pad-box {
-    position: relative; border: 1.5px dashed var(--border); border-radius: var(--radius-sm);
-    background: #fff; overflow: hidden;
-  }
-  #sigPad { display: block; width: 100%; height: 180px; touch-action: none; cursor: crosshair; }
-  .sig-placeholder {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    color: var(--text-ter); font-size: 13px; pointer-events: none;
-  }
-  .sig-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-  .sig-clear-btn {
-    font-size: 12px; color: var(--teal-dark); background: var(--teal-light); border: none;
-    padding: 6px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: 600;
-  }
-  .sig-date { font-size: 11.5px; color: var(--text-ter); }
-
   /* Print record view */
   #printView { display: none; }
   @media print {
@@ -269,14 +219,8 @@
     .print-sub { font-size: 12px; text-align: center; color: #555; margin-bottom: 16px; }
     .print-section-title { font-size: 14px; font-weight: 700; margin: 16px 0 6px; border-bottom: 1px solid #333; padding-bottom: 3px; }
     .print-row { display: flex; gap: 8px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px dotted #ccc; }
-    .print-row .k { min-width: 140px; color: #444; }
+    .print-row .k { min-width: 160px; color: #444; }
     .print-row .v { flex: 1; font-weight: 600; }
-    #printConsentText { font-size: 11px; line-height: 1.6; }
-    #printConsentText h4 { font-size: 12.5px; margin: 10px 0 4px; }
-    #printConsentText h5 { font-size: 11.5px; margin: 8px 0 3px; }
-    #printConsentText p { margin: 0 0 6px; }
-    .print-sig-block { display: flex; gap: 24px; align-items: flex-end; margin-top: 14px; }
-    .print-sig-img { border: 1px solid #999; width: 260px; height: 90px; object-fit: contain; }
   }
 </style>
 </head>
@@ -297,7 +241,6 @@
     </p>
   </div>
 
-
   <!-- Section 1: Basic Info -->
   <div class="card">
     <div class="sec-title"><span class="sec-num">1</span>基本信息 <span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Basic Information</span></div>
@@ -306,7 +249,11 @@
     </div>
     <div class="info-grid">
       <div class="info-field">
-        <label>姓名（或编号）<span class="en-dark">Name / ID</span></label>
+        <label>编号 <span class="en-dark">Study ID</span></label>
+        <input class="info-input" type="text" id="infoId" placeholder="请填写研究编号 / Study ID">
+      </div>
+      <div class="info-field">
+        <label>姓名 <span class="en-dark">Name</span></label>
         <input class="info-input" type="text" id="infoName" placeholder="请填写 / Please enter">
       </div>
       <div class="info-field">
@@ -322,6 +269,10 @@
         </div>
       </div>
       <div class="info-field">
+        <label>科室与床位 <span class="en-dark">Ward &amp; Bed No.</span></label>
+        <input class="info-input" type="text" id="infoBed" placeholder="例：心外科 / 12床">
+      </div>
+      <div class="info-field">
         <label>手术类型 <span class="en-dark">Surgery Type</span></label>
         <input class="info-input" type="text" id="infoSurgery" placeholder="例：腹腔镜胆囊切除 / e.g. Laparoscopic cholecystectomy">
       </div>
@@ -331,8 +282,8 @@
   <!-- Section 2: Emotion -->
   <div class="card">
     <div class="sec-title"><span class="sec-num">2</span>您现在的感受是什么？<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">How are you feeling?</span></div>
-    <div class="sec-hint">请点选最符合您感受的表情，最多选 3 个
-      <span class="en-dark">Select up to 3 emotions that best describe how you feel right now.</span>
+    <div class="sec-hint">请点选最符合您感受的表情，最多选 3 个或自由描述
+      <span class="en-dark">Select up to 3 emotions that best describe how you feel right now, or describe it in your own words.</span>
     </div>
     <div class="emo-grid" id="emoGrid">
       <div class="emo-card" data-word="焦虑"><div class="emo-face">😰</div><div class="emo-word">焦虑</div><div class="emo-word-en">Anxious</div></div>
@@ -376,6 +327,10 @@
       <div class="emo-card" data-word="期待"><div class="emo-face">🤩</div><div class="emo-word">期待</div><div class="emo-word-en">Eager</div></div>
       <div class="emo-card" data-word="有信心"><div class="emo-face">💪</div><div class="emo-word">有信心</div><div class="emo-word-en">Confident</div></div>
     </div>
+    <div class="info-field" style="margin-top:12px;">
+      <label>自由描述您的感受（选填）<span class="en-dark">Describe your feelings in your own words (optional)</span></label>
+      <input class="info-input" type="text" id="emoFreeText" placeholder="例：说不清楚，就是心里很乱 / e.g. Hard to describe, just feeling unsettled…">
+    </div>
     <div class="emo-result">已选 / Selected：<span id="emoSel">尚未选择 / None yet</span></div>
   </div>
 
@@ -402,114 +357,6 @@
     </div>
   </div>
 
-  <!-- Section 4: Informed Consent -->
-  <div class="card" id="consentCard">
-    <div class="sec-title"><span class="sec-num">4</span>知情同意书 <span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Informed Consent Form</span></div>
-    <div class="sec-hint">请仔细阅读以下知情同意书全文，勾选确认并签名后即可提交问卷
-      <span class="en-dark">Please read the full informed consent below, check the confirmation box, and sign to complete your submission.</span>
-    </div>
-
-    <div class="consent-scroll" id="consentFullText">
-      <div class="consent-meta">
-        <div><strong>【方案名称】</strong>：单次床边存在适应性音乐治疗协议（PAMT）在围手术期住院患者中的应用——探索性案例研究</div>
-        <div><strong>【主要研究者】</strong>：魏雅铭、徐华银、Hyunju Chong</div>
-        <div><strong>【申办者】</strong>：厦门弘爱医院艺术与健康研究中心</div>
-      </div>
-      <p>尊敬的受试者：您被邀请参加"单次床边存在适应性音乐治疗协议（PAMT）在围手术期住院患者中的应用"探索性案例研究。请仔细阅读本知情同意书并慎重做出是否参加本项研究的决定。研究人员会向您详细解释本研究的内容，您可以随时提出问题。我们鼓励您在做出参与此项研究的决定之前，和您的家人及朋友进行充分讨论。本研究的目的、背景、研究过程及其他重要信息如下：</p>
-
-      <h4>一、研究背景</h4>
-      <p>音乐治疗是一种安全、非侵入性的辅助治疗方法。手术住院患者在术前和术后常经历焦虑、紧张和不适等情绪困扰。存在适应性音乐治疗（PAMT）是一种由音乐治疗师在您的床边实施的个体化音乐治疗方法，治疗师会根据您当下的情绪和身体状态，即时调整音乐的节奏、旋律和风格，帮助您放松和调节情绪。本研究希望了解这种音乐治疗方法在手术前后的实际应用效果和您的真实感受。</p>
-
-      <h4>二、研究目的</h4>
-      <p>主要研究目的：探索PAMT在手术前后住院患者床边的实际应用过程，了解患者在接受音乐治疗后的即时感受和反应。</p>
-      <p>次要研究目的：初步评估音乐治疗干预前后您的整体情绪状态变化，描述音乐治疗的实施过程，为今后更大规模的研究积累经验。</p>
-
-      <h4>三、研究过程</h4>
-      <h5>1. 研究对象</h5>
-      <p>如果您符合以下条件，则可参与本研究（纳入标准）：</p>
-      <ol>
-        <li>年龄18周岁及以上；</li>
-        <li>于厦门弘爱医院住院并接受择期手术的患者；</li>
-        <li>意识清楚，具有基本语言沟通能力；</li>
-        <li>自愿参加本研究并签署知情同意书；</li>
-        <li>无听力障碍。</li>
-      </ol>
-      <p>如果您有以下疾病，则不得参与本研究（排除标准）：</p>
-      <ol>
-        <li>严重精神疾病或认知障碍，无法理解研究内容或配合评估；</li>
-        <li>正在接受其他心理治疗或音乐治疗；</li>
-        <li>严重听力障碍；</li>
-        <li>生命体征不稳定或处于重症监护状态；</li>
-        <li>拒绝签署知情同意书。</li>
-      </ol>
-      <h5>2. 研究流程</h5>
-      <p>在您入选研究前，研究人员会与您进行简短的沟通，了解您的基本情况（年龄、手术信息等），确认您是否符合参加条件。若您符合条件并签署本知情同意书，将按以下步骤进行研究：</p>
-      <ul>
-        <li>治疗方法：由一位具有相关学历与临床经验的音乐治疗师在您的病床旁实施一次15分钟左右的存在适应性音乐治疗（PAMT）。</li>
-        <li>治疗过程包括5个阶段：（1）情绪登记：治疗师会请您用几个词描述当前的感受；（2）音乐镜像：治疗师根据您的状态进行即兴演奏；（3）觉察促进：在音乐体验中引导您感受当下；（4）适应调节：根据您的反馈调整音乐；（5）稳定收尾：帮助您达到舒适的状态。</li>
-        <li>治疗随访：在音乐治疗结束后，研究人员会再次请您评估当前的整体感受（在一条0-10的量尺上标出您的感觉），并请您回答1-2个简短的问题（如"现在感觉怎么样？"），以及对本次治疗的满意度打分。整个过程（含评估）约需20-30分钟。</li>
-      </ul>
-      <h5>3. 研究告知</h5>
-      <p>本研究仅包含一次音乐治疗，完成治疗和评估后即结束研究。如您在过程中感到不适，可随时要求停止，无需任何理由。您参与本研究仅需一次，整个过程约20-30分钟（含干预前评估、音乐治疗和干预后评估）。</p>
-
-      <h4>四、风险与受益</h4>
-      <p><strong>1. 参加本研究的风险是什么？</strong>无需特别关注的严重不良反应。音乐治疗过程中如出现明显不适，治疗师会立即暂停或终止干预。</p>
-      <p><strong>2. 参加研究有什么受益？</strong>直接受益：您可能在治疗过程中体验到整体情绪状态的改善和放松，以及您之后在住院期间可免费再次预约音乐治疗。潜在受益：您的参与将帮助研究者了解音乐治疗在手术患者中的应用效果，为今后改善住院患者的情绪支持提供依据。</p>
-
-      <h4>五、研究结果的使用和个人信息的保密</h4>
-      <p>在您和其他受试者的理解和协助下，通过本项目研究的结果可能会在医学杂志上发表，但是我们会按照法律的要求为您的研究记录保密。研究受试者的个人信息将受到严格保密，除非应相关法律要求，您个人信息不会被泄露。必要时，政府管理部门和医院伦理委员会及其它相关研究人员可以按规定查阅您的资料。</p>
-
-      <h4>六、关于研究费用及相关补偿</h4>
-      <p><strong>1.</strong> 音乐治疗师咨询和服务、音乐治疗研究所用的器械、评估，以及治疗师咨询费等免费使用。</p>
-      <p><strong>2. 发生损伤后的补偿：</strong>本研究为非侵入性音乐治疗研究，风险极低。如在研究过程中因研究操作导致任何不适或损害，研究团队将协助您获得相应的医疗处理。如果您不参与本项研究，不会对您的正常医疗和护理产生任何影响。您将继续接受医生为您安排的常规治疗和护理。</p>
-
-      <h4>七、受试者的权利和责任</h4>
-      <p><strong>1. 您的权利：</strong>在参加研究的整个过程中，您都是自愿的。如果您决定不参加本研究，也不会影响您应该得到的其他治疗。如果您决定参加，会要求您在这份书面知情同意书上签字。您有权在试验的任何阶段随时退出试验而不会遭到歧视或受到不公平的待遇，您相应医疗待遇与权益不受影响。</p>
-      <p><strong>2. 您的责任：</strong>作为受试者，您需要提供有关自身病史和当前身体状况的真实情况；告诉研究医生自己在本次研究期间所发现的任何不适；不得服用医生已告知的受限制药物、食物等；告诉研究医生自己最近是否计划参与其他研究，或目前正参与其他研究。</p>
-
-      <h4>九、相关联系方式</h4>
-      <p>如果您有与本研究相关的任何问题，请通过电话与项目负责人魏雅铭或主要研究者徐华银联系。</p>
-      <p>如果您有与自身权利/权益相关的任何问题，或者您想反映参与本研究过程中遭遇的困难、不满和忧虑，或者想提供与本研究有关的意见和建议，请联系<span class="consent-underline">伦理委员会</span>，联系电话：<span class="consent-underline">0592-5261060</span>，电子邮件：<span class="consent-underline">irb@haxm.com</span>。</p>
-
-      <h4>受试者确认</h4>
-      <p>我已被告知此项研究的目的、背景、过程、风险及获益等情况。我有足够的时间和机会进行提问，问题的答复我很满意。我也被告知，当我有问题、想反映困难、顾虑、对研究的建议，或想进一步获得信息，或为研究提供帮助时，应当与谁联系。我已经阅读这份知情同意书，并且同意参加本研究。</p>
-      <p class="consent-underline">我知道我可以选择不参加此项研究，或在研究期间的任何时候无需任何理由退出研究。</p>
-      <p>我已知道如果我的状况更差了，或者我出现严重的不良反应，或者我的研究医生觉得继续参加研究不符合我的最佳利益，他/她会决定让我退出研究。无需征得我的同意，资助方或者监管机构也可能在研究期间终止研究。如果发生该情况，医生将及时通知我，研究医生也会与我讨论我的其他选择。</p>
-      <p class="consent-underline">我将得到这份知情同意书的副本，上面包含我和研究者的签名。</p>
-    </div>
-    <div class="consent-scroll-hint">↕ 上下滑动阅读全文 / Scroll to read full text</div>
-
-    <div class="consent-field-grid">
-      <div class="info-field">
-        <label>受试者姓名（打印或正楷手写）<span class="en-dark">Subject Name</span></label>
-        <input class="info-input" type="text" id="consentName" placeholder="请填写 / Please enter">
-      </div>
-      <div class="info-field">
-        <label>联系电话 <span class="en-dark">Phone</span></label>
-        <input class="info-input" type="tel" id="consentPhone" placeholder="请填写 / Please enter">
-      </div>
-    </div>
-
-    <label class="consent-checkbox">
-      <input type="checkbox" id="consentAgree">
-      <span>我已阅读并理解上述知情同意书全部内容，问题已获得满意解答，我自愿参加本研究，并知道可随时无理由退出。
-        <span class="en-dark" style="display:block;margin-top:3px;">I have read and understood this informed consent form and voluntarily agree to participate. I may withdraw at any time without reason.</span>
-      </span>
-    </label>
-
-    <div class="sig-pad-wrap">
-      <label>受试者签名 <span class="en-dark" style="display:inline;">Subject Signature — please sign with your finger or mouse below</span></label>
-      <div class="sig-pad-box">
-        <canvas id="sigPad"></canvas>
-        <div class="sig-placeholder" id="sigPlaceholder">请在此处签名 / Sign here</div>
-      </div>
-      <div class="sig-actions">
-        <button type="button" class="sig-clear-btn" onclick="clearSignature()">清除重签 / Clear</button>
-        <span class="sig-date" id="sigDate">签名日期 / Date：未签名 / Not signed</span>
-      </div>
-    </div>
-  </div>
-
   <!-- Submit -->
   <div class="submit-wrap">
     <button class="submit-btn" onclick="handleSubmit()">提交干预前问卷 →
@@ -528,32 +375,17 @@
     <div class="result-note">➤ 请将此页面交还治疗师，准备开始 PAMT 干预。
       <span class="en-note">Please return this screen to the therapist. You are now ready to begin the PAMT session.</span>
     </div>
-    <button class="result-close" onclick="printRecord()" style="background:var(--teal);color:#fff;border-color:var(--teal);margin-top:10px;">🖨️ 打印 / 另存为 PDF 完整记录 <span style="display:block;font-size:11px;font-weight:400;opacity:0.85;">Print / Save as PDF (full record)</span></button>
+    <button class="result-close" onclick="printRecord()" style="background:var(--teal);color:#fff;border-color:var(--teal);margin-top:10px;">🖨️ 打印 / 另存为 PDF 记录 <span style="display:block;font-size:11px;font-weight:400;opacity:0.85;">Print / Save as PDF</span></button>
     <button class="result-close" onclick="closeResult()">关闭 / Close</button>
   </div>
 </div>
 
-<!-- Hidden printable full record: consent + signature + questionnaire, populated on submit -->
+<!-- Hidden printable record, populated on submit -->
 <div id="printView">
-  <div class="print-title">PAMT 干预前问卷 与 知情同意书记录</div>
-  <div class="print-sub">Pre-Intervention Questionnaire &amp; Informed Consent Record</div>
-
-  <div class="print-section-title">一、知情同意书 Informed Consent</div>
-  <div id="printConsentText"></div>
-  <div class="print-sig-block">
-    <div>
-      <div style="font-size:11px;color:#555;margin-bottom:4px;">受试者签名 Subject Signature：</div>
-      <img class="print-sig-img" id="printSigImg" src="" alt="signature">
-    </div>
-    <div style="font-size:11.5px;color:#333;">
-      <div id="printConfirmName"></div>
-      <div id="printConfirmPhone"></div>
-      <div id="printConfirmDate"></div>
-    </div>
-  </div>
-
-  <div class="print-section-title">二、干预前问卷记录 Pre-Intervention Data</div>
-  <div id="printQuestRows"></div>
+  <div class="print-title">PAMT 干预前问卷记录</div>
+  <div class="print-sub">Pre-Intervention Questionnaire Record</div>
+  <div class="print-section-title">干预前问卷数据 Pre-Intervention Data</div>
+  <div id="printRows"></div>
 </div>
 
 <script>
@@ -578,91 +410,6 @@ function updateVas() {
 vasRange.addEventListener('input', updateVas);
 updateVas();
 
-/* ---- Name field sync between consent section and basic info section ---- */
-const consentNameEl = document.getElementById('consentName');
-const infoNameEl = document.getElementById('infoName');
-consentNameEl.addEventListener('input', () => { if (!infoNameEl.value) infoNameEl.value = consentNameEl.value; });
-infoNameEl.addEventListener('input', () => { if (!consentNameEl.value) consentNameEl.value = infoNameEl.value; });
-
-/* ---- Signature pad ---- */
-const sigCanvas = document.getElementById('sigPad');
-const sigCtx = sigCanvas.getContext('2d');
-const sigPlaceholder = document.getElementById('sigPlaceholder');
-const sigDateEl = document.getElementById('sigDate');
-let sigHasDrawn = false;
-let sigDrawing = false;
-let sigLastPoint = null;
-let signedAt = null;
-
-function resizeSigCanvas() {
-  const rect = sigCanvas.getBoundingClientRect();
-  const ratio = window.devicePixelRatio || 1;
-  const imgData = sigHasDrawn ? sigCanvas.toDataURL() : null;
-  sigCanvas.width = rect.width * ratio;
-  sigCanvas.height = rect.height * ratio;
-  sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
-  sigCtx.lineWidth = 2.2;
-  sigCtx.lineCap = 'round';
-  sigCtx.lineJoin = 'round';
-  sigCtx.strokeStyle = '#1A1A1A';
-  if (imgData) {
-    const img = new Image();
-    img.onload = () => sigCtx.drawImage(img, 0, 0, rect.width, rect.height);
-    img.src = imgData;
-  }
-}
-window.addEventListener('resize', resizeSigCanvas);
-resizeSigCanvas();
-
-function sigPointFromEvent(e) {
-  const rect = sigCanvas.getBoundingClientRect();
-  const p = e.touches ? e.touches[0] : e;
-  return { x: p.clientX - rect.left, y: p.clientY - rect.top };
-}
-function sigStart(e) {
-  e.preventDefault();
-  sigDrawing = true;
-  sigLastPoint = sigPointFromEvent(e);
-}
-function sigMove(e) {
-  if (!sigDrawing) return;
-  e.preventDefault();
-  const pt = sigPointFromEvent(e);
-  sigCtx.beginPath();
-  sigCtx.moveTo(sigLastPoint.x, sigLastPoint.y);
-  sigCtx.lineTo(pt.x, pt.y);
-  sigCtx.stroke();
-  sigLastPoint = pt;
-  if (!sigHasDrawn) {
-    sigHasDrawn = true;
-    sigPlaceholder.style.display = 'none';
-    signedAt = new Date();
-    sigDateEl.textContent = '签名日期 / Date：' + formatDateTime(signedAt);
-  }
-}
-function sigEnd(e) {
-  sigDrawing = false;
-}
-sigCanvas.addEventListener('mousedown', sigStart);
-sigCanvas.addEventListener('mousemove', sigMove);
-window.addEventListener('mouseup', sigEnd);
-sigCanvas.addEventListener('touchstart', sigStart, { passive: false });
-sigCanvas.addEventListener('touchmove', sigMove, { passive: false });
-sigCanvas.addEventListener('touchend', sigEnd);
-
-function clearSignature() {
-  sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-  sigHasDrawn = false;
-  signedAt = null;
-  sigPlaceholder.style.display = 'flex';
-  sigDateEl.textContent = '签名日期 / Date：未签名 / Not signed';
-}
-
-function formatDateTime(d) {
-  const pad = n => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 function singleChip(groupId, el) {
   document.querySelectorAll('#' + groupId + ' .radio-chip').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
@@ -686,32 +433,30 @@ document.querySelectorAll('.emo-card').forEach(c => {
 });
 
 function handleSubmit() {
-  const consentName  = consentNameEl.value.trim();
-  const consentPhone = document.getElementById('consentPhone').value.trim();
-  const consentAgree = document.getElementById('consentAgree').checked;
+  const id      = document.getElementById('infoId').value.trim();
   const name    = document.getElementById('infoName').value.trim();
   const age     = document.getElementById('infoAge').value.trim();
   const gender  = document.querySelector('#genderChips .radio-chip.sel');
+  const bed     = document.getElementById('infoBed').value.trim();
   const surgery = document.getElementById('infoSurgery').value.trim();
+  const emoFree = document.getElementById('emoFreeText').value.trim();
 
-  if (!consentName)   { alert('请在知情同意书部分填写受试者姓名 / Please enter subject name in the consent section'); return; }
-  if (!consentAgree)  { alert('请先阅读并勾选知情同意确认框 / Please read and check the consent confirmation box'); return; }
-  if (!sigHasDrawn)   { alert('请在知情同意书部分手写签名 / Please sign your signature in the consent section'); return; }
-  if (!name)    { alert('请填写姓名或编号 / Please enter your name or ID'); return; }
+  if (!name)    { alert('请填写姓名 / Please enter your name'); return; }
   if (!age)     { alert('请填写年龄 / Please enter your age'); return; }
   if (!gender)  { alert('请选择性别 / Please select gender'); return; }
-  if (!selected.size) { alert('请至少选择一个情绪感受 / Please select at least one emotion'); return; }
+  if (!selected.size && !emoFree) { alert('请至少选择一个情绪感受，或在下方自由描述 / Please select at least one emotion, or describe it freely'); return; }
 
   const score = parseInt(vasRange.value);
-  const rows = [
-    ['姓名/编号 · Name/ID', name],
-    ['年龄 · Age', age + ' 岁 / yrs'],
-    ['性别 · Gender', gender.dataset.v],
-    ['手术类型 · Surgery', surgery || '未填写 / Not provided'],
-    ['情绪词 · Emotions', [...selected].join(' · ')],
-    ['VAS 评分（干预前）· VAS Score (Pre)', score + ' / 10 — ' + vasDescs[score]],
-    ['知情同意 · Consent', '已签署 / Signed (' + formatDateTime(signedAt) + ')'],
-  ];
+  const rows = [];
+  if (id) rows.push(['编号 · Study ID', id]);
+  rows.push(['姓名 · Name', name]);
+  rows.push(['年龄 · Age', age + ' 岁 / yrs']);
+  rows.push(['性别 · Gender', gender.dataset.v]);
+  if (bed) rows.push(['科室床位 · Ward/Bed', bed]);
+  rows.push(['手术类型 · Surgery', surgery || '未填写 / Not provided']);
+  rows.push(['情绪词 · Emotions', selected.size ? [...selected].join(' · ') : '（未点选表情）']);
+  if (emoFree) rows.push(['感受描述 · Description', emoFree]);
+  rows.push(['VAS 评分（干预前）· VAS Score (Pre)', score + ' / 10 — ' + vasDescs[score]]);
 
   document.getElementById('resRows').innerHTML = rows.map(([k,v]) =>
     `<div class="result-row"><div class="result-key">${k}</div><div class="result-val">${v}</div></div>`
@@ -719,12 +464,7 @@ function handleSubmit() {
   document.getElementById('resultOverlay').classList.add('show');
 
   /* ---- Populate the hidden printable record ---- */
-  document.getElementById('printConsentText').innerHTML = document.getElementById('consentFullText').innerHTML;
-  document.getElementById('printSigImg').src = sigCanvas.toDataURL('image/png');
-  document.getElementById('printConfirmName').textContent = '姓名 Name：' + consentName;
-  document.getElementById('printConfirmPhone').textContent = '联系电话 Phone：' + (consentPhone || '未填写 / N/A');
-  document.getElementById('printConfirmDate').textContent = '签名日期 Date：' + formatDateTime(signedAt);
-  document.getElementById('printQuestRows').innerHTML = rows.map(([k,v]) =>
+  document.getElementById('printRows').innerHTML = rows.map(([k,v]) =>
     `<div class="print-row"><div class="k">${k}</div><div class="v">${v}</div></div>`
   ).join('');
 }
