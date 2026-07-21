@@ -209,6 +209,20 @@
   @media (min-width: 521px) {
     .emo-grid { grid-template-columns: repeat(7, 1fr) !important; }
   }
+
+  /* Print record view */
+  #printView { display: none; }
+  @media print {
+    body * { visibility: hidden; }
+    #printView, #printView * { visibility: visible; }
+    #printView { display: block; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+    .print-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .print-sub { font-size: 12px; text-align: center; color: #555; margin-bottom: 16px; }
+    .print-section-title { font-size: 14px; font-weight: 700; margin: 16px 0 6px; border-bottom: 1px solid #333; padding-bottom: 3px; }
+    .print-row { display: flex; gap: 8px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px dotted #ccc; }
+    .print-row .k { min-width: 160px; color: #444; }
+    .print-row .v { flex: 1; font-weight: 600; }
+  }
 </style>
 </head>
 <body>
@@ -231,12 +245,16 @@
   <!-- Section 1: Basic Info -->
   <div class="card">
     <div class="sec-title"><span class="sec-num">1</span>基本信息<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Basic Information</span></div>
-    <div class="sec-hint">请填写与干预前问卷相同的姓名或编号
-      <span class="en-dark">Please use the same name or ID as in the pre-intervention questionnaire.</span>
+    <div class="sec-hint">请填写与干预前问卷相同的编号或姓名
+      <span class="en-dark">Please use the same ID or name as in the pre-intervention questionnaire.</span>
     </div>
     <div class="info-grid">
-      <div class="info-field info-full">
-        <label>姓名（或编号）<span class="en-dark">Name / ID</span></label>
+      <div class="info-field">
+        <label>编号 <span class="en-dark">Study ID</span></label>
+        <input class="info-input" type="text" id="infoId" placeholder="请与干预前保持一致 / Same as pre-intervention">
+      </div>
+      <div class="info-field">
+        <label>姓名 <span class="en-dark">Name</span></label>
         <input class="info-input" type="text" id="infoName" placeholder="请与干预前保持一致 / Same as pre-intervention">
       </div>
     </div>
@@ -245,8 +263,8 @@
   <!-- Section 2: Emotion -->
   <div class="card">
     <div class="sec-title"><span class="sec-num">2</span>现在您的感受是什么？<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">How are you feeling now?</span></div>
-    <div class="sec-hint">请点选最符合您此刻感受的表情，最多选 3 个
-      <span class="en-dark">Select up to 3 emotions that best describe how you feel right now.</span>
+    <div class="sec-hint">请点选最符合您此刻感受的表情，最多选 3 个或自由描述
+      <span class="en-dark">Select up to 3 emotions that best describe how you feel right now, or describe it in your own words.</span>
     </div>
     <div class="emo-grid" id="emoGrid">
       <div class="emo-card" data-word="焦虑"><div class="emo-face">😰</div><div class="emo-word">焦虑</div><div class="emo-word-en">Anxious</div></div>
@@ -289,6 +307,10 @@
       <div class="emo-card" data-word="充满希望"><div class="emo-face">🌟</div><div class="emo-word">充满希望</div><div class="emo-word-en">Hopeful</div></div>
       <div class="emo-card" data-word="期待"><div class="emo-face">🤩</div><div class="emo-word">期待</div><div class="emo-word-en">Eager</div></div>
       <div class="emo-card" data-word="有信心"><div class="emo-face">💪</div><div class="emo-word">有信心</div><div class="emo-word-en">Confident</div></div>
+    </div>
+    <div class="info-field" style="margin-top:12px;">
+      <label>自由描述您的感受（选填）<span class="en-dark">Describe your feelings in your own words (optional)</span></label>
+      <input class="info-input" type="text" id="emoFreeText" placeholder="例：说不清楚，就是心里很乱 / e.g. Hard to describe, just feeling unsettled…">
     </div>
     <div class="emo-result">已选 / Selected：<span id="emoSel">尚未选择 / None yet</span></div>
   </div>
@@ -351,8 +373,17 @@
     <div class="result-note">➤ 感谢您的参与！请将此页面交还治疗师，本次记录已完成。
       <span class="en-note">Thank you for your participation! Please return this screen to the therapist. The session record is now complete.</span>
     </div>
+    <button class="result-close" onclick="printRecord()" style="background:var(--purple);color:#fff;border-color:var(--purple);margin-top:10px;">🖨️ 打印 / 另存为 PDF 记录 <span style="display:block;font-size:11px;font-weight:400;opacity:0.85;">Print / Save as PDF</span></button>
     <button class="result-close" onclick="closeResult()">关闭 / Close</button>
   </div>
+</div>
+
+<!-- Hidden printable record, populated on submit -->
+<div id="printView">
+  <div class="print-title">PAMT 干预后问卷记录</div>
+  <div class="print-sub">Post-Intervention Questionnaire Record</div>
+  <div class="print-section-title">干预后问卷数据 Post-Intervention Data</div>
+  <div id="printRows"></div>
 </div>
 
 <script>
@@ -407,23 +438,36 @@ function rateStar(v) {
 }
 
 function handleSubmit() {
-  const name = document.getElementById('infoName').value.trim();
-  if (!name)          { alert('请填写姓名或编号 / Please enter your name or ID'); return; }
-  if (!selected.size) { alert('请至少选择一个情绪感受 / Please select at least one emotion'); return; }
+  const id      = document.getElementById('infoId').value.trim();
+  const name    = document.getElementById('infoName').value.trim();
+  const emoFree = document.getElementById('emoFreeText').value.trim();
+
+  if (!name)          { alert('请填写姓名 / Please enter your name'); return; }
+  if (!selected.size && !emoFree) { alert('请至少选择一个情绪感受，或在下方自由描述 / Please select at least one emotion, or describe it freely'); return; }
   if (!satScore)      { alert('请为本次治疗评分 / Please rate this session'); return; }
 
   const score = parseInt(vasRange.value);
-  const rows = [
-    ['姓名/编号 · Name/ID', name],
-    ['情绪词 · Emotions', [...selected].join(' · ')],
-    ['VAS 评分（干预后）· VAS (Post)', score + ' / 10 — ' + vasDescs[score]],
-    ['满意度 · Satisfaction', satScore + ' / 5 — ' + satLabelsCn[satScore]],
-  ];
+  const rows = [];
+  if (id) rows.push(['编号 · Study ID', id]);
+  rows.push(['姓名 · Name', name]);
+  rows.push(['情绪词 · Emotions', selected.size ? [...selected].join(' · ') : '（未点选表情）']);
+  if (emoFree) rows.push(['感受描述 · Description', emoFree]);
+  rows.push(['VAS 评分（干预后）· VAS (Post)', score + ' / 10 — ' + vasDescs[score]]);
+  rows.push(['满意度 · Satisfaction', satScore + ' / 5 — ' + satLabelsCn[satScore]]);
 
   document.getElementById('resRows').innerHTML = rows.map(([k,v]) =>
     `<div class="result-row"><div class="result-key">${k}</div><div class="result-val">${v}</div></div>`
   ).join('');
   document.getElementById('resultOverlay').classList.add('show');
+
+  /* ---- Populate the hidden printable record ---- */
+  document.getElementById('printRows').innerHTML = rows.map(([k,v]) =>
+    `<div class="print-row"><div class="k">${k}</div><div class="v">${v}</div></div>`
+  ).join('');
+}
+
+function printRecord() {
+  window.print();
 }
 
 function closeResult() {
