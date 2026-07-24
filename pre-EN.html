@@ -152,6 +152,31 @@
   .vas-label { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
   .vas-label-en { font-size: 10px; color: var(--text-ter); margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 
+  /* STAI-6 */
+  .stai-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .stai-item:last-child { border-bottom: none; }
+  .stai-q { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; display: flex; align-items: baseline; gap: 6px; }
+  .stai-q-num { color: var(--teal); flex-shrink: 0; }
+  .stai-q-en { font-size: 10.5px; color: var(--text-ter); font-weight: 400; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; margin-bottom: 8px; }
+  .stai-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .stai-opt {
+    padding: 8px 4px; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+    font-size: 12px; text-align: center; cursor: pointer; background: #fff; color: var(--text-sec);
+    transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; line-height: 1.3;
+  }
+  .stai-opt .opt-en { font-size: 9.5px; color: var(--text-ter); display: block; margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  .stai-opt.sel { background: var(--teal-light); border-color: var(--teal); color: var(--teal-dark); font-weight: 600; }
+  .stai-opt.sel .opt-en { color: var(--teal); }
+  .stai-total {
+    margin-top: 14px; font-size: 13px; color: var(--text-sec);
+    padding: 10px 12px; background: var(--bg); border-radius: var(--radius-sm);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stai-total .num { font-size: 20px; font-weight: 700; color: var(--teal-dark); }
+  @media (max-width: 420px) {
+    .stai-options { grid-template-columns: repeat(2, 1fr); }
+  }
+
   /* Submit */
   .submit-btn {
     width: 100%; padding: 14px; border-radius: var(--radius); border: none;
@@ -357,6 +382,47 @@
     </div>
   </div>
 
+  <!-- Section 4: STAI-6 -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">4</span>状态焦虑简表<span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">STAI-6 State Anxiety</span></div>
+    <div class="sec-hint">请选择最符合您此时此刻感觉的选项，没有对错之分
+      <span class="en-dark">Choose the option that best matches how you feel right now. There are no right or wrong answers.</span>
+    </div>
+    <div id="staiItems">
+      <div class="stai-item" data-idx="0">
+        <div class="stai-q"><span class="stai-q-num">1.</span>我感到心情平静</div>
+        <div class="stai-q-en">I feel calm</div>
+        <div class="stai-options" data-q="0"></div>
+      </div>
+      <div class="stai-item" data-idx="1">
+        <div class="stai-q"><span class="stai-q-num">2.</span>我是紧张的</div>
+        <div class="stai-q-en">I feel tense</div>
+        <div class="stai-options" data-q="1"></div>
+      </div>
+      <div class="stai-item" data-idx="2">
+        <div class="stai-q"><span class="stai-q-num">3.</span>我感到烦乱</div>
+        <div class="stai-q-en">I feel upset</div>
+        <div class="stai-options" data-q="2"></div>
+      </div>
+      <div class="stai-item" data-idx="3">
+        <div class="stai-q"><span class="stai-q-num">4.</span>我是轻松的</div>
+        <div class="stai-q-en">I feel relaxed</div>
+        <div class="stai-options" data-q="3"></div>
+      </div>
+      <div class="stai-item" data-idx="4">
+        <div class="stai-q"><span class="stai-q-num">5.</span>我感到心满意足</div>
+        <div class="stai-q-en">I feel content</div>
+        <div class="stai-options" data-q="4"></div>
+      </div>
+      <div class="stai-item" data-idx="5">
+        <div class="stai-q"><span class="stai-q-num">6.</span>我是烦恼的</div>
+        <div class="stai-q-en">I feel worried</div>
+        <div class="stai-options" data-q="5"></div>
+      </div>
+    </div>
+    <div class="stai-total">总分 · Total Score（6-24分）<span class="num" id="staiTotal">—</span></div>
+  </div>
+
   <!-- Submit -->
   <div class="submit-wrap">
     <button class="submit-btn" onclick="handleSubmit()">提交干预前问卷 →
@@ -432,6 +498,41 @@ document.querySelectorAll('.emo-card').forEach(c => {
   });
 });
 
+/* ---- STAI-6 ---- */
+const staiOptLabels = [
+  ['完全没有','Not at all'],
+  ['有些','Somewhat'],
+  ['中等程度','Moderately'],
+  ['非常明显','Very much']
+];
+const staiReverse = [true, false, false, true, true, false]; // items 1,4,5 (0-indexed 0,3,4) are reverse-scored
+const staiAnswers = new Array(6).fill(null); // stores raw selected value 1-4
+
+document.querySelectorAll('.stai-options').forEach(group => {
+  const qIdx = parseInt(group.dataset.q);
+  staiOptLabels.forEach((label, i) => {
+    const val = i + 1;
+    const opt = document.createElement('div');
+    opt.className = 'stai-opt';
+    opt.innerHTML = `${label[0]}<span class="opt-en">${label[1]}</span>`;
+    opt.addEventListener('click', () => {
+      group.querySelectorAll('.stai-opt').forEach(o => o.classList.remove('sel'));
+      opt.classList.add('sel');
+      staiAnswers[qIdx] = val;
+      updateStaiTotal();
+    });
+    group.appendChild(opt);
+  });
+});
+
+function updateStaiTotal() {
+  const totalEl = document.getElementById('staiTotal');
+  if (staiAnswers.some(v => v === null)) { totalEl.textContent = '—'; return; }
+  let sum = 0;
+  staiAnswers.forEach((v, i) => { sum += staiReverse[i] ? (5 - v) : v; });
+  totalEl.textContent = sum + ' / 24';
+}
+
 function handleSubmit() {
   const id      = document.getElementById('infoId').value.trim();
   const name    = document.getElementById('infoName').value.trim();
@@ -445,8 +546,11 @@ function handleSubmit() {
   if (!age)     { alert('请填写年龄 / Please enter your age'); return; }
   if (!gender)  { alert('请选择性别 / Please select gender'); return; }
   if (!selected.size && !emoFree) { alert('请至少选择一个情绪感受，或在下方自由描述 / Please select at least one emotion, or describe it freely'); return; }
+  if (staiAnswers.some(v => v === null)) { alert('请完成 STAI-6 状态焦虑简表的全部 6 题 / Please answer all 6 STAI-6 items'); return; }
 
   const score = parseInt(vasRange.value);
+  let staiSum = 0;
+  staiAnswers.forEach((v, i) => { staiSum += staiReverse[i] ? (5 - v) : v; });
   const rows = [];
   if (id) rows.push(['编号 · Study ID', id]);
   rows.push(['姓名 · Name', name]);
@@ -457,6 +561,7 @@ function handleSubmit() {
   rows.push(['情绪词 · Emotions', selected.size ? [...selected].join(' · ') : '（未点选表情）']);
   if (emoFree) rows.push(['感受描述 · Description', emoFree]);
   rows.push(['VAS 评分（干预前）· VAS Score (Pre)', score + ' / 10 — ' + vasDescs[score]]);
+  rows.push(['STAI-6 总分（干预前）· STAI-6 Score (Pre)', staiSum + ' / 24']);
 
   document.getElementById('resRows').innerHTML = rows.map(([k,v]) =>
     `<div class="result-row"><div class="result-key">${k}</div><div class="result-val">${v}</div></div>`
