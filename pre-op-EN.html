@@ -136,8 +136,8 @@
   .vas-gradient {
     position: absolute; inset: 0;
     background: linear-gradient(to right,
-      #41C464, #70C84B, #A4D234, #D4DA28, #F0C030,
-      #F09A28, #F07028, #E84E30, #D83838, #B82020, #9A1010);
+      #9A1010, #B82020, #D83838, #E84E30, #F07028,
+      #F09A28, #F0C030, #D4DA28, #A4D234, #70C84B, #41C464);
     border-radius: 16px;
   }
   .vas-bar-wrap input[type=range] {
@@ -165,6 +165,28 @@
   .vas-num { font-size: 28px; font-weight: 700; }
   .vas-label { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
   .vas-label-en { font-size: 10px; color: var(--text-ter); margin-top: 1px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+
+  /* ── Anxiety NRS buttons ── */
+  .nrs-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+    gap: 8px; margin: 4px 0 14px;
+  }
+  .nrs-btn {
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    padding: 9px 3px 7px; text-align: center; cursor: pointer; background: #fff;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .nrs-btn:active { transform: scale(0.95); }
+  .nrs-num { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .nrs-label { font-size: 9.5px; color: var(--text-ter); line-height: 1.25; margin-top: 2px; }
+  .nrs-btn.sel { border-width: 2px; }
+  .nrs-readout {
+    text-align: center; padding: 8px 12px; background: var(--bg);
+    border-radius: var(--radius-sm); font-size: 13px; color: var(--text-sec);
+  }
+  .nrs-readout .nrs-r-num { font-size: 20px; font-weight: 700; margin-right: 4px; }
+  .nrs-readout .nrs-r-en { font-size: 10.5px; color: var(--text-ter); display: block; margin-top: 2px; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 
   /* ── Mode cards ── */
   .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -570,33 +592,47 @@
     </div>
   </div>
 
-  <!-- Q2: VAS -->
+  <!-- Q2: Anxiety NRS -->
   <div class="card">
     <div class="sec-title"><span class="sec-num">2</span>您现在的焦虑程度<span class="sec-en">Anxiety Level</span></div>
-    <div class="sec-hint">请拖动滑块，颜色越红代表焦虑越高
-      <span class="en-dark">Drag the slider — deeper red indicates higher anxiety.</span>
+    <div class="sec-hint">请点选最符合您此刻感受的分数，没有对错之分
+      <span class="en-dark">Tap the number that best matches how you feel right now. There are no right or wrong answers.</span>
+    </div>
+
+    <div class="nrs-grid" id="anxGrid"></div>
+    <div class="nrs-readout" id="anxReadout">
+      <span class="nrs-r-num" id="anxNum">—</span><span id="anxLbl">请点选上方分数 / Please select a score above</span>
+      <span class="nrs-r-en" id="anxLblEn"></span>
+    </div>
+  </div>
+
+  <!-- Q2b: Overall Wellbeing VAS -->
+  <div class="card">
+    <div class="sec-title"><span class="sec-num">3</span>您现在的整体感受<span class="sec-en">Overall Wellbeing</span></div>
+    <div class="sec-hint">0 = 整体感觉非常不好，10 = 整体感觉非常好，请拖动滑块
+      <span class="en-dark">0 = Feeling very poor, 10 = Feeling very well. Drag the slider.</span>
     </div>
 
     <div class="vas-bar-wrap">
       <div class="vas-gradient"></div>
-      <div class="vas-thumb" id="vasThumb" style="left:0%"></div>
-      <input type="range" id="vasRange" min="0" max="10" step="1" value="0">
+      <div class="vas-thumb" id="wellThumb" style="left:50%"></div>
+      <input type="range" id="wellRange" min="0" max="10" step="1" value="5">
     </div>
     <div class="vas-ruler">
-      <span>0 完全不焦虑<br><span class="ruler-en">No anxiety</span></span>
-      <span style="text-align:center;">5 中度<br><span class="ruler-en">Moderate</span></span>
-      <span style="text-align:right;">10 极度焦虑<br><span class="ruler-en">Extreme</span></span>
+      <span>0 非常不好<br><span class="ruler-en">Very poor</span></span>
+      <span style="text-align:center;">5 一般<br><span class="ruler-en">Moderate</span></span>
+      <span style="text-align:right;">10 非常好<br><span class="ruler-en">Very well</span></span>
     </div>
     <div class="vas-readout">
-      <div class="vas-num" id="vasNum" style="color:#41C464">0</div>
-      <div class="vas-label" id="vasLbl">感觉很平静放松</div>
-      <div class="vas-label-en" id="vasLblEn">Feeling very calm and relaxed</div>
+      <div class="vas-num" id="wellNum" style="color:#F0C030">5</div>
+      <div class="vas-label" id="wellLbl">一般</div>
+      <div class="vas-label-en" id="wellLblEn">Moderate</div>
     </div>
   </div>
 
-  <!-- Q2b: Daily Music Listening Time -->
+  <!-- Q2c: Daily Music Listening Time -->
   <div class="card">
-    <div class="sec-title"><span class="sec-num">3</span>过去一周内，您平均每天听音乐的时间<span class="sec-en">Daily Music Listening (Past Week)</span></div>
+    <div class="sec-title"><span class="sec-num">4</span>过去一周内，您平均每天听音乐的时间<span class="sec-en">Daily Music Listening (Past Week)</span></div>
     <div class="sec-hint">请选择最符合您实际情况的选项
       <span class="en-dark">Select the option that best reflects your typical daily music listening time over the past week.</span>
     </div>
@@ -611,7 +647,7 @@
 
   <!-- Q3b: Prior Music Therapy Experience -->
   <div class="card">
-    <div class="sec-title"><span class="sec-num">4</span>您有无接受过音乐治疗？<span class="sec-en">Prior Music Therapy Experience</span></div>
+    <div class="sec-title"><span class="sec-num">5</span>您有无接受过音乐治疗？<span class="sec-en">Prior Music Therapy Experience</span></div>
     <div class="sec-hint">请选择您的情况
       <span class="en-dark">Please select whether you have previously received music therapy.</span>
     </div>
@@ -623,7 +659,7 @@
 
   <!-- Q5: Music Preference -->
   <div class="card">
-    <div class="sec-title"><span class="sec-num">5</span>您的音乐偏好<span class="sec-en">Your Music Preferences</span></div>
+    <div class="sec-title"><span class="sec-num">6</span>您的音乐偏好<span class="sec-en">Your Music Preferences</span></div>
     <div class="sec-hint">请填写您的音乐喜好，这将帮助治疗师为您精准选曲
       <span class="en-dark">Please share your music preferences — this helps the therapist select the most suitable tracks for you.</span>
     </div>
@@ -702,7 +738,7 @@
 
   <!-- Section 6: Informed Consent -->
   <div class="card" id="consentCard">
-    <div class="sec-title"><span class="sec-num">6</span>知情同意书 <span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Informed Consent Form</span></div>
+    <div class="sec-title"><span class="sec-num">7</span>知情同意书 <span style="font-size:11px;font-weight:400;color:var(--text-ter);margin-left:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">Informed Consent Form</span></div>
     <div class="sec-hint">请仔细阅读以下知情同意书全文，勾选确认并签名后即可提交问卷
       <span class="en-dark">Please read the full informed consent below, check the confirmation box, and sign to complete your submission.</span>
     </div>
@@ -765,7 +801,7 @@
       <p><strong>1. 您的权利：</strong>在参加研究的整个过程中，您都是自愿的。如果您决定不参加本研究，也不会影响您应该得到的其他治疗。如果您决定参加，会要求您在这份书面知情同意书上签字。您有权在试验的任何阶段随时退出试验而不会遭到歧视或受到不公平的待遇，您相应医疗待遇与权益不受影响。</p>
       <p><strong>2. 您的责任：</strong>作为受试者，您需要提供有关自身病史和当前身体状况的真实情况；告诉研究医生自己在本次研究期间所发现的任何不适；不得服用医生已告知的受限制药物、食物等；告诉研究医生自己最近是否计划参与其他研究，或目前正参与其他研究。</p>
 
-      <h4>九、相关联系方式</h4>
+      <h4>八、相关联系方式</h4>
       <p>如果您有与本研究相关的任何问题，请通过电话与项目负责人魏雅铭或主要研究者徐华银联系。</p>
       <p>如果您有与自身权利/权益相关的任何问题，或者您想反映参与本研究过程中遭遇的困难、不满和忧虑，或者想提供与本研究有关的意见和建议，请联系<span class="consent-underline">伦理委员会</span>，联系电话：<span class="consent-underline">0592-5261060</span>，电子邮件：<span class="consent-underline">irb@haxm.com</span>。</p>
 
@@ -854,27 +890,57 @@
 </div>
 
 <script>
-const vasColors = ["#41C464","#70C84B","#A4D234","#D4DA28","#F0C030","#F09A28","#F07028","#E84E30","#D83838","#B82020","#9A1010"];
-const vasDescs   = ["感觉很平静，完全不焦虑","几乎没有焦虑感","轻微有些不安","有一点紧张","稍微感到焦虑","中度焦虑","明显感到紧张不安","相当焦虑，难以放松","非常焦虑，身体紧绷","极度焦虑，坐立不安","已无法承受的焦虑"];
-const vasDescsEn = ["Very calm, no anxiety at all","Almost no anxiety","Slightly unsettled","A little tense","Mildly anxious","Moderately anxious","Noticeably tense and restless","Quite anxious, hard to relax","Very anxious, body feels tight","Extremely anxious, can't stay still","Overwhelming, unbearable anxiety"];
+/* ---- Q2: Anxiety NRS (11 buttons) ---- */
+const anxColors   = ["#41C464","#70C84B","#A4D234","#D4DA28","#F0C030","#F09A28","#F07028","#E84E30","#D83838","#B82020","#9A1010"];
+const anxDescs    = ["感觉很平静，完全不焦虑","几乎没有焦虑感","轻微有些不安","有一点紧张","稍微感到焦虑","中度焦虑","明显感到紧张不安","相当焦虑，难以放松","非常焦虑，身体紧绷","极度焦虑，坐立不安","已无法承受的焦虑"];
+const anxDescsEn  = ["Very calm, no anxiety at all","Almost no anxiety","Slightly unsettled","A little tense","Mildly anxious","Moderately anxious","Noticeably tense and restless","Quite anxious, hard to relax","Very anxious, body feels tight","Extremely anxious, can't stay still","Overwhelming, unbearable anxiety"];
+const anxShortLbl = ["不焦虑","几乎没有","轻微不安","有点紧张","稍感焦虑","中度焦虑","明显紧张","难以放松","身体紧绷","坐立不安","无法承受"];
 
-const vasRange = document.getElementById('vasRange');
-const vasThumb = document.getElementById('vasThumb');
-const vasNum   = document.getElementById('vasNum');
-const vasLbl   = document.getElementById('vasLbl');
-const vasLblEn = document.getElementById('vasLblEn');
+let anxScore = null;
+const anxGrid = document.getElementById('anxGrid');
+anxShortLbl.forEach((label, i) => {
+  const btn = document.createElement('div');
+  btn.className = 'nrs-btn';
+  btn.innerHTML = `<div class="nrs-num">${i}</div><div class="nrs-label">${label}</div>`;
+  btn.addEventListener('click', () => {
+    anxGrid.querySelectorAll('.nrs-btn').forEach(b => {
+      b.classList.remove('sel'); b.style.borderColor = ''; b.style.background = '';
+      b.querySelector('.nrs-num').style.color = '';
+    });
+    btn.classList.add('sel');
+    btn.style.borderColor = anxColors[i];
+    btn.style.background  = anxColors[i] + '1A';
+    btn.querySelector('.nrs-num').style.color = anxColors[i];
+    anxScore = i;
+    document.getElementById('anxNum').textContent  = i;
+    document.getElementById('anxNum').style.color  = anxColors[i];
+    document.getElementById('anxLbl').textContent  = anxDescs[i];
+    document.getElementById('anxLblEn').textContent = anxDescsEn[i];
+  });
+  anxGrid.appendChild(btn);
+});
 
-function updateVas() {
-  const v = parseInt(vasRange.value);
+/* ---- Q2b: Overall Wellbeing VAS (slider) ---- */
+const wellColors  = ["#9A1010","#B82020","#D83838","#E84E30","#F07028","#F09A28","#F0C030","#D4DA28","#A4D234","#70C84B","#41C464"];
+const wellDescs   = ["整体感觉非常不好","感觉很差","感觉较差","感觉不太好","略感不适","一般","还不错","感觉较好","感觉好","感觉很好","整体感觉非常好"];
+const wellDescsEn = ["Feeling very poor","Feeling quite poor","Feeling rather poor","Feeling slightly off","Slightly uncomfortable","Moderate","Fairly good","Feeling good","Feeling well","Feeling very well","Feeling excellent"];
+const wellRange   = document.getElementById('wellRange');
+const wellThumb   = document.getElementById('wellThumb');
+const wellNum     = document.getElementById('wellNum');
+const wellLbl     = document.getElementById('wellLbl');
+const wellLblEn   = document.getElementById('wellLblEn');
+
+function updateWell() {
+  const v = parseInt(wellRange.value);
   const pct = v / 10 * 100;
-  vasThumb.style.left = `calc(${pct}% - ${pct * 0.22}px)`;
-  vasNum.textContent  = v;
-  vasNum.style.color  = vasColors[v];
-  vasLbl.textContent  = vasDescs[v];
-  vasLblEn.textContent = vasDescsEn[v];
+  wellThumb.style.left = `calc(${pct}% - ${pct * 0.22}px)`;
+  wellNum.textContent  = v;
+  wellNum.style.color  = wellColors[v];
+  wellLbl.textContent  = wellDescs[v];
+  wellLblEn.textContent = wellDescsEn[v];
 }
-vasRange.addEventListener('input', updateVas);
-updateVas();
+wellRange.addEventListener('input', updateWell);
+updateWell();
 
 // Emotion selection (max 3)
 const selected = new Set();
@@ -1035,11 +1101,12 @@ function handleSubmit() {
   const emoFree = document.getElementById('emoFreeText').value.trim();
 
   if (!selected.size && !emoFree) { alert('请至少选择一个情绪感受，或在下方自由描述 / Please select at least one emotion, or describe it freely'); return; }
+  if (anxScore === null) { alert('请点选您现在的焦虑程度 / Please select your current anxiety level'); return; }
   if (!consentName)   { alert('请在知情同意书部分填写受试者姓名 / Please enter subject name in the consent section'); return; }
   if (!consentAgree)  { alert('请先阅读并勾选知情同意确认框 / Please read and check the consent confirmation box'); return; }
   if (!sigHasDrawn)   { alert('请在知情同意书部分手写签名 / Please sign your signature in the consent section'); return; }
 
-  const score   = parseInt(vasRange.value);
+  const wellScore = parseInt(wellRange.value);
   const musicTimeEl = document.querySelector('#musicTimeOpts .music-time-opt.sel');
   const musicTime   = musicTimeEl ? musicTimeEl.dataset.v : '未填写';
   const priorMTEl   = document.querySelector('#priorMTOpts .music-time-opt.sel');
@@ -1075,7 +1142,8 @@ function handleSubmit() {
   if (surgery)   rows.push(['手术类型 · Surgery',   surgery]);
   rows.push(['情绪 · Emotions',   selected.size ? [...selected].join(' · ') : '（未点选表情）']);
   if (emoFree) rows.push(['感受描述 · Description', emoFree]);
-  rows.push(['焦虑评分 · Anxiety', score + ' / 10 — ' + vasDescs[score]]);
+  rows.push(['焦虑评分 · Anxiety', anxScore + ' / 10 — ' + anxDescs[anxScore]]);
+  rows.push(['整体感受 · Wellbeing', wellScore + ' / 10 — ' + wellDescs[wellScore]]);
   rows.push(['每日听音乐 · Music/day', musicTime]);
   rows.push(['接受过音乐治疗 · Prior MT', priorMT]);
   if (genres.length) rows.push(['音乐类型 · Genre',   genres.join('、')]);
