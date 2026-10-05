@@ -36,7 +36,7 @@ Users should review the materials and adapt their use according to the requireme
 
 A permanent DOI for this repository will be provided through Zenodo following the release of the archived version.
 
-DOI: To be added.
+DOI: 10.5281/zenodo.23160716
 
 ## License
 
